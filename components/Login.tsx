@@ -1,91 +1,53 @@
 "use client";
 import React, { useState } from "react";
 
-const Login = () => {
-
-    
+const Login = ({ isOpen, onClose }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [isRegistering, setIsRegistering] = useState(false); // Track login/register mode
+  const [isRegistering, setIsRegistering] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const loginUser = (username, password) => {
+  const loginUser = (username,password) => {
     const users = JSON.parse(localStorage.getItem("users") || "[]");
-    const user = users.find(
-      (u) => u.username === username && u.password === password
-    );
+    const user = users.find((u)=> u.username===username && u.password===password);
 
     if (user) {
-      localStorage.setItem("currentUser", username);
-      return true;
+        localStorage.setItem("currentUser",username);
+        return true;
     }
     return false;
-  };
 
-  const registerUser = (username, password) => {
-    const users = JSON.parse(localStorage.getItem("users") || "[]");
-    if (users.find((u) => u.username === username)) {
-      return false; // Username already exists
-    }
-    users.push({ username, password });
-    localStorage.setItem("users", JSON.stringify(users));
-    return true;
-  };
-
-  const handleLoginOrRegister = () => {
-    if (isRegistering) {
-      if (registerUser(username, password)) {
-        setErrorMessage("Registration successful!");
-        setIsRegistering(false); // Switch to login mode after registration
-      } else {
-        setErrorMessage("Registration failed. Username already exists.");
-      }
-    } else {
-      if (loginUser(username, password)) {
-        setErrorMessage("Login successful!");
-        // Redirect or perform other actions after login
-      } else {
-        setErrorMessage("Login failed. Incorrect username or password.");
-      }
-    }
-  };
+  }
+  if (!isOpen) {
+    return null;
+  }
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="border p-4 rounded-md">
-        <h2 className="text-xl font-bold mb-4">
-          {isRegistering ? "Register" : "Login"}
-        </h2>
-        {errorMessage && <p className="text-red-500 mb-2">{errorMessage}</p>}
-        <div className="mb-2">
+    <div className="fixed inset-0 bg-black bg-opacity-10 flex justify-center items-center">
+      <div className="flex flex-col gap-4 p-4 relative bg-neutral-500 rounded-md">
+        <div>
+          <button onClick={onClose} className="absolute top-2 right-4">
+            X
+          </button>
+          <h1 className="text-xl">Sign in</h1>
+        </div>
+        <div className="flex flex-col gap-2 text-neutral-50">
           <input
             type="text"
             placeholder="Username"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="border p-2 rounded-md w-full"
+            onChange={(e) => e.target.value}
           />
-        </div>
-        <div className="mb-4">
           <input
             type="text"
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="border p-2 rounded-md w-full"
+            onChange={(e) => e.target.value}
           />
         </div>
-        <button
-          onClick={handleLoginOrRegister}
-          className="bg-blue-500 text-white p-2 rounded-md w-full"
-        >
-          {isRegistering ? "Register" : "Login"}
-        </button>
-        <button
-          onClick={() => setIsRegistering(!isRegistering)}
-          className="mt-2 text-sm text-blue-500"
-        >
-          {isRegistering ? "Switch to Login" : "Switch to Register"}
+
+        <button className="px-3 py-2 bg-neutral-950 rounded-md hover:bg-neutral-900 transition-colors duration-100">
+          Sign in
         </button>
       </div>
     </div>

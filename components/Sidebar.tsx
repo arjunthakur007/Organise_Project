@@ -1,57 +1,81 @@
 "use client";
-import { useRouter } from "next/navigation"; //router 
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useState, useEffect } from "react";
 import Login from "./Login";
 
 const Sidebar = () => {
-  
-    const router = useRouter() //var  of use router
+    const router = useRouter();
+    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+    
+    //login/logout functionality
+    const [loggedInUser, setLoggedInUser] = useState(null);
 
-  const sideItems = [
-    {
-      tiitle: "Home",
-      icon: "",
-      link: "/",
-    },
-    {
-      tiitle: "Tasks",
-      icon: "",
-      link: "/",
-    },
-    {
-      tiitle: "Add new",
-      icon: "",
-      link: "/create-task", //link
-    },
-  ];
-  return (
-    <div className="border max-w-[30vw] h-[100vh] px-4">
-      <div className="flex w-full justify-center py-4">
-        <h1 className="text-xl font-bold">Organise</h1>
-      </div>
+    useEffect(() => {
+        // Check if a user is already logged in on component mount
+        const user = localStorage.getItem("currentUser");
+        if (user) {
+            setLoggedInUser(user);
+        }
+    }, []);
 
-      <div>
-        {sideItems.map((i) => (
-          <div 
-          onClick={()=> router.push(i.link)}
-          className="mb-2 flex items-center py-2 rounded-sm hover:bg-neutral-800 transition-colors duration-200">
-            <span className="mr-2">{i.icon}</span>
-            <span>{i.tiitle}</span>
-          </div>
-        ))}
-      </div>
+    const handleLogout = () => {
+        // Clear logged-in user data and update state
+        localStorage.removeItem("currentUser");
+        setLoggedInUser(null);
+    };
 
-      <div className="flex w-full justify-center mt-[50vh]">
-            <button 
-            onClick={Login}
-            className="border rounded-md px-4 py-2 hover:bg-neutral-800 transition-colors duration-200">
-              Log in</button>
-      </div>
+    const sideItems = [
+        {
+            tiitle: "Home",
+            icon: "",
+            link: "/",
+        },
+        {
+            tiitle: "Add new",
+            icon: "",
+            link: "/create-task",
+        },
+    ];
 
+    return (
+        <div className="border max-w-[30vw] h-[100vh] px-4">
+            <div className="flex w-full justify-center py-4">
+                <h1 className="text-xl font-bold">Organise</h1>
+            </div>
 
-    </div>
+            <div>
+                {sideItems.map((i) => (
+                    <div
+                        key={i.tiitle} // Add key prop
+                        onClick={() => router.push(i.link)}
+                        className="mb-2 flex items-center py-2 rounded-sm hover:bg-neutral-800 transition-colors duration-200"
+                    >
+                        <span className="mr-2">{i.icon}</span>
+                        <span>{i.tiitle}</span>
+                    </div>
+                ))}
+            </div>
 
-  );
+            <div className="flex w-full justify-center mt-[50vh]">
+                {loggedInUser ? (
+                    <button
+                        onClick={handleLogout}
+                        className="border rounded-md px-4 py-2 hover:bg-neutral-800 transition-colors duration-200"
+                    >
+                        Logout
+                    </button>
+                ) : (
+                    <button
+                        onClick={() => setIsLoginModalOpen(true)}
+                        className="border rounded-md px-4 py-2 hover:bg-neutral-800 transition-colors duration-200"
+                    >
+                        Login
+                    </button>
+                )}
+                <Login isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
+            </div>
+        </div>
+    );
 };
 
 export default Sidebar;

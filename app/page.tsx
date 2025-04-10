@@ -15,7 +15,7 @@ const page = () => {
         <Home/>
        </div>
        <div className='hidde w-full justify-center items-center'>
-      <Login/>
+
       </div>
     </div>
   )
