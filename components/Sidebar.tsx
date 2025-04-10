@@ -1,8 +1,10 @@
 "use client";
 import { useRouter } from "next/navigation"; //router 
 import React from "react";
+import Login from "./Login";
 
 const Sidebar = () => {
+  
     const router = useRouter() //var  of use router
 
   const sideItems = [
@@ -38,6 +40,15 @@ const Sidebar = () => {
           </div>
         ))}
       </div>
+
+      <div className="flex w-full justify-center mt-[50vh]">
+            <button 
+            onClick={Login}
+            className="border rounded-md px-4 py-2 hover:bg-neutral-800 transition-colors duration-200">
+              Log in</button>
+      </div>
+
+
     </div>
 
   );
