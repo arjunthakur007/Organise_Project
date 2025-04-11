@@ -1,57 +1,120 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
-const Login = ({ isOpen, onClose }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [isRegistering, setIsRegistering] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+const Modal = ({ isOpen, onClose }) => {
+    const router = useRouter();
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [isRegistering, setIsRegistering] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
-  const loginUser = (username,password) => {
-    const users = JSON.parse(localStorage.getItem("users") || "[]");
-    const user = users.find((u)=> u.username===username && u.password===password);
+    //getting the alreday exisiting username & password if both matches
+    //if user is found then "currentuser" is set in the localstorage and returns ture
+    const loginUser = (username, password) => {
+        const users = JSON.parse(localStorage.getItem("users") || "[]");
+        const user = users.find(
+            (u) => u.username === username && u.password === password
+        );
 
-    if (user) {
-        localStorage.setItem("currentUser",username);
+        if (user) {
+            localStorage.setItem("currentUser", username);
+            return true;
+        }
+        return false;
+    };
+
+    //finding if i.e a similar username & password
+    // & if it doent exist then creating a new one
+    const registerUser = (username, password) => {
+        const users = JSON.parse(localStorage.getItem("users") || "[]");
+        if (users.find((u) => u.username === username)) {
+            return false;
+        }
+        users.push({ username, password });
+        localStorage.setItem("users", JSON.stringify(users));
         return true;
-    }
-    return false;
+    };
 
-  }
-  if (!isOpen) {
-    return null;
-  }
+    //when login/register button is clicked
+    //if login is successfull - onclose() is called , user is directed to home
+    const handleLoginOrRegister = () => {
+        if (isRegistering) {
+            if (registerUser(username, password)) {
+                setErrorMessage("Registration successful!");
+                setIsRegistering(false);
+            } else {
+                setErrorMessage("Registration failed. Username already exists.");
+            }
+        } else {
+            if (loginUser(username, password)) {
+                setErrorMessage("Login successful!");
+                onClose();
+                router.push("/Home");
+            } else {      
+                setErrorMessage("Login failed. Incorrect username or password.");
+            }
+        }
+    };
 
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-10 flex justify-center items-center">
-      <div className="flex flex-col gap-4 p-4 relative bg-neutral-500 rounded-md">
-        <div>
-          <button onClick={onClose} className="absolute top-2 right-4">
-            X
-          </button>
-          <h1 className="text-xl">Sign in</h1>
+    const handleLogout = () => {
+        localStorage.removeItem("currentUser");
+        onClose();
+        router.push("/Home");
+    };
+
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center py-2 px-4">
+            <div className="bg-neutral-700 border p-4 rounded-md relative text-white">
+                <h1 className="text-xl">{isRegistering ? "Register" : "Login"}</h1>
+                <button
+                    onClick={onClose}
+                    className="absolute top-2 right-2 text-gray-200"
+                >
+                    X
+                </button>
+                {errorMessage && <p className="text-red-500 mb-2">{errorMessage}</p>}
+                <div className="flex flex-col gap-4 my-4">
+                    <input
+                        type="text"
+                        placeholder="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        className="bg-neutral-800 p-2 rounded text-white"
+                    />
+                    <input
+                        type="text"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="bg-neutral-800 p-2 rounded text-white"
+                    />
+                </div>
+                <button
+                    onClick={handleLoginOrRegister}
+                    className="bg-blue-500 text-white p-2 rounded-md w-full"
+                >
+                    {isRegistering ? "Register" : "Login"}
+                </button>
+                <button
+                    onClick={() => setIsRegistering(!isRegistering)}
+                    className="mt-2 text-sm text-blue-500"
+                >
+                    {isRegistering ? "Switch to Login" : "Switch to Register"}
+                </button>
+                {localStorage.getItem("currentUser") && (
+                    <button
+                        onClick={handleLogout}
+                        className="mt-2 text-sm text-red-500"
+                    >
+                        Logout
+                    </button>
+                )}
+            </div>
         </div>
-        <div className="flex flex-col gap-2 text-neutral-50">
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => e.target.value}
-          />
-          <input
-            type="text"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => e.target.value}
-          />
-        </div>
-
-        <button className="px-3 py-2 bg-neutral-950 rounded-md hover:bg-neutral-900 transition-colors duration-100">
-          Sign in
-        </button>
-      </div>
-    </div>
-  );
+    );
 };
 
-export default Login;
+export default Modal;

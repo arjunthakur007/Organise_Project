@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 
 const Modal = () => {
-    const [card_data, setCard_Data] = useState([])
+  const [card_data, setCard_Data] = useState([]);
 
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
@@ -10,26 +10,39 @@ const Modal = () => {
   const [image, setImage] = useState("");
 
   const add_data = () => {
+    const loggedInUser = localStorage.getItem("currentUser");
+    if (!loggedInUser) {
+      alert("Please log in to add cards.");
+      return;
+    }
+
     const newCard = {
       title: title,
       subtitle: subtitle,
       image: image,
       description: description,
+      userId: loggedInUser, // Add userId to card
     };
 
-    
- setCard_Data((prevData)=> [...prevData, newCard]);
+    setCard_Data((prevData) => [...prevData, newCard]);
 
- localStorage.setItem("card", JSON.stringify([...card_data, newCard]));
+    // Use user-specific key for localStorage
+    const userCardsKey = `cards_${loggedInUser}`;
+    const existingCards = JSON.parse(
+      localStorage.getItem(userCardsKey) || "[]"
+    );
+    localStorage.setItem(
+      userCardsKey,
+      JSON.stringify([...existingCards, newCard])
+    );
 
- setTitle("");
- setSubtitle(""),
- setDescription("");
- setImage("");
+    setTitle("");
+    setSubtitle("");
+    setDescription("");
+    setImage("");
 
-  console.log(newCard);
+    console.log(newCard);
   };
-
 
   return (
     <div className="w-screen h-screen flex justify-center items-center">
@@ -38,7 +51,7 @@ const Modal = () => {
           <input
             value={image}
             type="text"
-            placeholder="Image  URL"
+            placeholder="Image URL"
             className="w-full"
             onChange={(e) => setImage(e.target.value)}
           />
@@ -70,9 +83,10 @@ const Modal = () => {
           ></textarea>
         </div>
 
-        <button 
-        onClick={add_data}
-        className="border rounded-md p-2 bg-neutral-900 hover:bg-neutral-700 transition-colors duration-150">
+        <button
+          onClick={add_data}
+          className="border rounded-md p-2 bg-neutral-900 hover:bg-neutral-700 transition-colors duration-150"
+        >
           Add Task
         </button>
       </div>
