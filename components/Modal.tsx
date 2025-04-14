@@ -10,8 +10,8 @@ const Modal = () => {
   const [image, setImage] = useState("");
 
   const add_data = () => {
-    const loggedInUser = localStorage.getItem("currentUser");
-    if (!loggedInUser) {
+    const signedInUser = localStorage.getItem("currentUser");
+    if (!signedInUser) {
       alert("Please Sign in to add cards.");
       return;
     }
@@ -21,13 +21,13 @@ const Modal = () => {
       subtitle: subtitle,
       image: image,
       description: description,
-      userId: loggedInUser, // Add userId to card
+      userId: signedInUser, // Add userId to card
     };
 
     setCard_Data((prevData) => [...prevData, newCard]);
 
     // Use user-specific key for localStorage
-    const userCardsKey = `cards_${loggedInUser}`;
+    const userCardsKey = `cards_${signedInUser}`;
     const existingCards = JSON.parse(
       localStorage.getItem(userCardsKey) || "[]"
     );

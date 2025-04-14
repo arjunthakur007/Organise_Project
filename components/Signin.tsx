@@ -68,7 +68,7 @@ const Modal = ({ isOpen, onClose }) => {
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center py-2 px-4">
             <div className="bg-neutral-700 border p-4 rounded-md relative text-white">
-                <h1 className="text-xl">{isRegistering ? "Register" : "signin"}</h1>
+                <h1 className="text-xl">{isRegistering ? "Register" : "Signin"}</h1>
                 <button
                     onClick={onClose}
                     className="absolute top-2 right-2 text-gray-200"

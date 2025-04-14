@@ -3,16 +3,16 @@ import React, { useEffect, useState } from "react";
 
 export const Home = () => {
     const [card_data, setCard_Data] = useState([]);
-    const [loggedInUser, setLoggedInUser] = useState(null);
+    const [signedInUser, setsignedInUser] = useState(null);
 
     useEffect(() => {
         const user = localStorage.getItem("currentUser");
-        setLoggedInUser(user);
+        setsignedInUser(user);
     }, []);
 
     useEffect(() => {
-        if (loggedInUser) {
-            const userCardsKey = `cards_${loggedInUser}`;
+        if (signedInUser) {
+            const userCardsKey = `cards_${signedInUser}`;
             const storedData = localStorage.getItem(userCardsKey);
 
             if (storedData) {
@@ -26,9 +26,9 @@ export const Home = () => {
                 setCard_Data([]); // Clear cards if no data for the user
             }
         } else {
-            setCard_Data([]); // Clear cards if no user logged in.
+            setCard_Data([]); // Clear cards if no user signed in.
         }
-    }, [loggedInUser]);
+    }, [signedInUser]);
 
     console.log(card_data);
 
