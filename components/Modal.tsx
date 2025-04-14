@@ -12,7 +12,7 @@ const Modal = () => {
   const add_data = () => {
     const loggedInUser = localStorage.getItem("currentUser");
     if (!loggedInUser) {
-      alert("Please log in to add cards.");
+      alert("Please Sign in to add cards.");
       return;
     }
 

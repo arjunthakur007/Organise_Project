@@ -1,13 +1,13 @@
 "use client";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
-import Login from "./Login";
+import Signin from {./Signin};
 
 const Sidebar = () => {
     const router = useRouter();
-    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+    const [issigninModalOpen, setIsSigninModalOpen] = useState(false);
     
-    //login/logout functionality
+    //signin/logout functionality
     const [loggedInUser, setLoggedInUser] = useState(null);
 
     useEffect(() => {
@@ -66,13 +66,13 @@ const Sidebar = () => {
                     </button>
                 ) : (
                     <button
-                        onClick={() => setIsLoginModalOpen(true)}
+                        onClick={() => setIsSigninModalOpen(true)}
                         className="border rounded-md px-4 py-2 hover:bg-neutral-800 transition-colors duration-200"
                     >
-                        Login
+                        Signin
                     </button>
                 )}
-                <Login isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
+                <Signin isOpen={isSigninModalOpen} onClose={() => setIsSigninModalOpen(false)}/>
             </div>
         </div>
     );

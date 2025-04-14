@@ -11,7 +11,7 @@ const Modal = ({ isOpen, onClose }) => {
 
     //getting the alreday exisiting username & password if both matches
     //if user is found then "currentuser" is set in the localstorage and returns ture
-    const loginUser = (username, password) => {
+    const signinUser = (username, password) => {
         const users = JSON.parse(localStorage.getItem("users") || "[]");
         const user = users.find(
             (u) => u.username === username && u.password === password
@@ -36,9 +36,9 @@ const Modal = ({ isOpen, onClose }) => {
         return true;
     };
 
-    //when login/register button is clicked
-    //if login is successfull - onclose() is called , user is directed to home
-    const handleLoginOrRegister = () => {
+    //when signin/register button is clicked
+    //if signin is successfull - onclose() is called , user is directed to home
+    const handleSigninOrRegister = () => {
         if (isRegistering) {
             if (registerUser(username, password)) {
                 setErrorMessage("Registration successful!");
@@ -47,18 +47,18 @@ const Modal = ({ isOpen, onClose }) => {
                 setErrorMessage("Registration failed. Username already exists.");
             }
         } else {
-            if (loginUser(username, password)) {
-                setErrorMessage("Login successful!");
+            if (signinUser(username, password)) {
+                setErrorMessage("signin successful!");
                 onClose();
                 router.push("/Home");
             } else {      
-                setErrorMessage("Login failed. Incorrect username or password.");
+                setErrorMessage("signin failed. Incorrect username or password.");
             }
         }
     };
 
     const handleLogout = () => {
-        localStorage.removeItem("currentUser");
+        localStorage.removeItem("currentUser"); //for clearing the cards from the screen
         onClose();
         router.push("/Home");
     };
@@ -68,7 +68,7 @@ const Modal = ({ isOpen, onClose }) => {
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center py-2 px-4">
             <div className="bg-neutral-700 border p-4 rounded-md relative text-white">
-                <h1 className="text-xl">{isRegistering ? "Register" : "Login"}</h1>
+                <h1 className="text-xl">{isRegistering ? "Register" : "signin"}</h1>
                 <button
                     onClick={onClose}
                     className="absolute top-2 right-2 text-gray-200"
@@ -93,23 +93,23 @@ const Modal = ({ isOpen, onClose }) => {
                     />
                 </div>
                 <button
-                    onClick={handleLoginOrRegister}
+                    onClick={handleSigninOrRegister}
                     className="bg-blue-500 text-white p-2 rounded-md w-full"
                 >
-                    {isRegistering ? "Register" : "Login"}
+                    {isRegistering ? "Register" : "Sign in"}
                 </button>
                 <button
                     onClick={() => setIsRegistering(!isRegistering)}
                     className="mt-2 text-sm text-blue-500"
                 >
-                    {isRegistering ? "Switch to Login" : "Switch to Register"}
+                    {isRegistering ? "Switch to Signin" : "Switch to Register"}
                 </button>
                 {localStorage.getItem("currentUser") && (
                     <button
                         onClick={handleLogout}
                         className="mt-2 text-sm text-red-500"
                     >
-                        Logout
+                        Sign out
                     </button>
                 )}
             </div>

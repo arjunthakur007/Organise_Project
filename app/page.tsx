@@ -3,7 +3,7 @@ import React from 'react'
 import Sidebar from '../components/Sidebar'
 import Home from '../components/Home'
 import Modal from '../components/Modal'
-import Login from '../components/Login'
+import signin from '../components/signin'
 
 const page = () => {
 
