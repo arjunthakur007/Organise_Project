@@ -1,17 +1,14 @@
 "use client";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
-import Signin from "./Signin"; // Corrected import path
+import Signin from "./Signin";
 
 const Sidebar = () => {
   const router = useRouter();
   const [issigninModalOpen, setIsSigninModalOpen] = useState(false);
-
-  // signin/signout functionality
   const [signedInUser, setsignedInUser] = useState(null);
 
   useEffect(() => {
-    // Check if a user is already signed in on component mount
     const user = localStorage.getItem("currentUser");
     if (user) {
       setsignedInUser(user);
@@ -19,34 +16,26 @@ const Sidebar = () => {
   }, []);
 
   const handleLogout = () => {
-    // Clear signed-in user data and update state
     localStorage.removeItem("currentUser");
     setsignedInUser(null);
   };
 
   const sideItems = [
-    {
-      tiitle: "Home",
-      icon: "",
-      link: "/",
-    },
-    {
-      tiitle: "Add new",
-      icon: "",
-      link: "/create-task",
-    },
+    { tiitle: "Home", icon: "", link: "/" },
+    { tiitle: "Add new", icon: "", link: "/create-task" },
   ];
 
   return (
-    <div className="border max-w-[30vw] h-[100vh] px-4">
+    <div className="fixed border max-w-[30vw] h-[100vh] px-4">
+      {" "}
+      {/* Added 'fixed' class */}
       <div className="flex w-full justify-center py-4">
         <h1 className="text-xl font-bold">Organise</h1>
       </div>
-
       <div>
         {sideItems.map((i) => (
           <div
-            key={i.tiitle} // Add key prop
+            key={i.tiitle}
             onClick={() => router.push(i.link)}
             className="mb-2 flex items-center py-2 rounded-sm hover:bg-neutral-800 transition-colors duration-200"
           >
@@ -55,7 +44,6 @@ const Sidebar = () => {
           </div>
         ))}
       </div>
-
       <div className="flex w-full justify-center mt-[50vh]">
         {signedInUser ? (
           <button

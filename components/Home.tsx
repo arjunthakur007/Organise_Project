@@ -66,7 +66,7 @@ export const Home = () => {
               className="flex mr-4 min-w-[20vw] bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
             >
               {editingCardId === card.id ? (
-                <div className="p-5 overflow-y-auto min-h-[200px]">
+                <div className="w-full p-5 overflow-y-auto min-h-[200px]">
                   <input
                     value={editedData.title}
                     onChange={(e) =>
@@ -98,7 +98,7 @@ export const Home = () => {
                     }
                     className="w-full mb-2 border rounded p-1"
                   />
-                  <div className="flex justify-between">
+                  <div className="w-full flex gap-4 justify-between">
                     <button
                       onClick={() => handleSave(card.id)}
                       className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800"
@@ -114,7 +114,7 @@ export const Home = () => {
                   </div>
                 </div>
               ) : (
-                <div className="p-5 overflow-y-auto min-h-[200px]">
+                <div className="flex flex-col justify-between  p-5 overflow-y-auto min-h-[200px]">
                   <a href="#">
                     <img
                       className="rounded-t-lg w-full"
@@ -133,7 +133,7 @@ export const Home = () => {
                   <p className="mb-3 font-normal text-gray-700 dark:text-gray-400 break-words">
                     {card.description}
                   </p>
-                  <div className="flex justify-between">
+                  <div className="flex gap-4 justify-between">
                     <button
                       onClick={() => handleEdit(card)}
                       className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800"

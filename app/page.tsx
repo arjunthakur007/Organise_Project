@@ -9,9 +9,9 @@ const page = () => {
 
   
   return (
-    <div className='flex'>
+    <div className='flex h-screen'>
       <Sidebar/>
-       <div>
+       <div className='ml-[20vw] w-full lg:ml-[8vw]'>
         <Home/>
        </div>
        <div className='hidde w-full justify-center items-center'>
