@@ -2,8 +2,6 @@
 import React, { useState } from "react";
 
 const Modal = () => {
-  const [card_data, setCard_Data] = useState([]);
-
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [description, setDescription] = useState("");
@@ -17,16 +15,14 @@ const Modal = () => {
     }
 
     const newCard = {
+      id: Date.now(),
       title: title,
       subtitle: subtitle,
       image: image,
       description: description,
-      userId: signedInUser, // Add userId to card
+      userId: signedInUser,
     };
 
-    setCard_Data((prevData) => [...prevData, newCard]);
-
-    // Use user-specific key for localStorage
     const userCardsKey = `cards_${signedInUser}`;
     const existingCards = JSON.parse(
       localStorage.getItem(userCardsKey) || "[]"
@@ -40,13 +36,12 @@ const Modal = () => {
     setSubtitle("");
     setDescription("");
     setImage("");
-
-    console.log(newCard);
   };
 
   return (
-    <div className="w-screen h-screen flex justify-center items-center">
-      <div className="flex flex-col w-[50vw] h-[60vh] border rounded-md p-4 gap-4">
+    <div className=" w-screen p-4 flex flex-col items-center justify-center">
+      <div className="max-w-lg w-full border flex flex-col rounded-md p-4 gap-4">
+        {/* Input fields... */}
         <div className="border rounded-md p-2">
           <input
             value={image}
